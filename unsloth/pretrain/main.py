@@ -170,10 +170,29 @@ def main(args):
         return { "text" : texts, }
     pass
 
-    DATASET_TRAIN_PATH = os.path.join(args.mounted_data_folder, "joined/train")
-    DATASET_VAL_PATH = os.path.join(args.mounted_data_folder, "joined/validation")
+    DATASET_PATH = os.path.join(args.mounted_data_folder, "joined")
+
+    # Fix issue with datasets.load_from_disk causing write permission error
+    import shutil  
+    import os  
+    # Define the path and local folder  
+    local_folder = './data/temp_data_folder'  
+    
+    # Ensure the local folder exists  
+    os.makedirs(local_folder, exist_ok=True)  
+    
+    # Copy the dataset to the local folder  
+    shutil.copytree(DATASET_PATH, local_folder, dirs_exist_ok=True)  
+
+    DATASET_TRAIN_PATH = os.path.join(local_folder, "train")
+    DATASET_VAL_PATH = os.path.join(local_folder, "validation")
     print("dataset train path:", DATASET_TRAIN_PATH)
     print("dataset val path:", DATASET_VAL_PATH)
+
+    from datasets import load_from_disk  
+    
+    # Load the dataset  
+    dataset_train = load_from_disk(local_folder)  
 
     from datasets import load_dataset, load_from_disk
     dataset_train = load_from_disk(DATASET_TRAIN_PATH)
