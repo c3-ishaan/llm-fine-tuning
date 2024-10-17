@@ -170,11 +170,11 @@ def main(args):
         return { "text" : texts, }
     pass
 
-    DATASET_PATH = os.path.join(args.mounted_data_folder, "joined")
-
     # Fix issue with datasets.load_from_disk causing write permission error
     import shutil  
     import os  
+    DATASET_PATH = os.path.join(args.mounted_data_folder, "joined")
+
     # Define the path and local folder  
     local_folder = './data/temp_data_folder'  
     
