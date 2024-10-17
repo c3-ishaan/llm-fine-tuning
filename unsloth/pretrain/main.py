@@ -172,6 +172,8 @@ def main(args):
 
     DATASET_TRAIN_PATH = os.path.join(args.mounted_data_folder, "joined/train")
     DATASET_VAL_PATH = os.path.join(args.mounted_data_folder, "joined/validation")
+    print("dataset train path:", DATASET_TRAIN_PATH)
+    print("dataset val path:", DATASET_VAL_PATH)
 
     from datasets import load_dataset, load_from_disk
     dataset_train = load_from_disk(DATASET_TRAIN_PATH)
