@@ -35,4 +35,4 @@ jobs:
       image: mcr.microsoft.com/azureml/curated/acpt-pytorch-2.2-cuda12.1
     outputs:
       output_dir: ${{parent.outputs.trained_model}}
-    compute: azureml:shasaj-01-azure-test #update NC48adsA100 to the name of your compute target 
+    compute: azureml:A100x4-Training #update NC48adsA100 to the name of your compute target 

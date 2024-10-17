@@ -8,8 +8,9 @@ from transformers.integrations import MLflowCallback
 from transformers import TrainingArguments
 from unsloth import is_bfloat16_supported
 from unsloth import UnslothTrainer, UnslothTrainingArguments
-from datasets import load_dataset
-import os
+from datasets import load_dataset, load_from_disk
+import shutil  
+import os  
 import argparse
 import math
 
@@ -157,7 +158,6 @@ def main(args):
     )
 
 
-
     EOS_TOKEN = tokenizer.eos_token # Must add EOS_TOKEN
     def formatting_prompts_func(examples):
         inputs       = examples["inputs"]
@@ -170,9 +170,6 @@ def main(args):
         return { "text" : texts, }
     pass
 
-    # Fix issue with datasets.load_from_disk causing write permission error
-    import shutil  
-    import os  
     DATASET_PATH = os.path.join(args.mounted_data_folder, "joined")
 
     # Define the path and local folder  
@@ -189,12 +186,6 @@ def main(args):
     print("dataset train path:", DATASET_TRAIN_PATH)
     print("dataset val path:", DATASET_VAL_PATH)
 
-    from datasets import load_from_disk  
-    
-    # Load the dataset  
-    dataset_train = load_from_disk(local_folder)  
-
-    from datasets import load_dataset, load_from_disk
     dataset_train = load_from_disk(DATASET_TRAIN_PATH)
     dataset_train = dataset_train.map(formatting_prompts_func, batched = True,)
     dataset_train = dataset_train.train_test_split(train_size = 0.01)["train"]
